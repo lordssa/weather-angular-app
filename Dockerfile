@@ -1,6 +1,5 @@
 FROM node:10.16.3 as node
 
-RUN mkdir /usr/src/app 
 WORKDIR /usr/src/app
 COPY . /usr/src/app
 

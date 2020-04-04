@@ -9,7 +9,9 @@ import { WeatherService } from "../weather.service";
 export class HomeComponent implements OnInit {
 
   location = {
-    city: 'london'
+    city: 'london',
+    lat: '',
+    lon: '',
   };
 
   latitude;
@@ -24,13 +26,14 @@ export class HomeComponent implements OnInit {
     this.value = localStorage.getItem('location');
     if (this.value != null) {
       this.location = JSON.parse(this.value)
-      this._weatherService.getWeather(this.location.city).subscribe(response => {
-        console.log(response);
-        this.weather = response;
-      });
+      if (this.location.city != null && this.location.city != "") {
+        this.getWeather(this.location.city)
+      } else {
+        this.getWeatherDataByCoords(this.location.lat, this.location.lon);
+      }
     } else {
       this.getlocation();
-    }    
+    }
   }
 
   getlocation() {
@@ -38,11 +41,31 @@ export class HomeComponent implements OnInit {
       navigator.geolocation.watchPosition((success) => {
         this.latitude = success.coords.latitude;
         this.longitude = success.coords.longitude;
-        this._weatherService.getWeatherDataByCoords(this.latitude, this.longitude).subscribe(response => {
-          console.log(response);
-          this.weather = response;
-        });
+        let location = {
+          lat: this.latitude,
+          lon: this.longitude
+        }
+        localStorage.setItem('location', JSON.stringify(location));
+        this.getWeatherDataByCoords(this.latitude, this.longitude);
       })
     }
   }
+
+  getWeather(city) {
+    this._weatherService.getWeather(city).subscribe(response => {
+      console.log(response);
+      this.weather = response;
+    });
+  }
+  getWeatherDataByCoords(lat, lon) {
+    this._weatherService.getWeatherDataByCoords(this.latitude, this.longitude).subscribe(response => {
+      console.log(response);
+      this.weather = response;
+    });
+  }
+
+  getCity(city) {
+    this.getWeather(city);
+  }
+
 }

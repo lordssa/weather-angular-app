@@ -1,9 +1,42 @@
 <div class="container">
 
-    <div class="info">
-        <h1>City: {{weather.city.name}}</h1>
-        <h1>latitude: {{weather.city.coord.lat}}</h1>
-        <h1>longitude: {{weather.city.coord.lon}}</h1>
+    <div class="row justify-content-md-center">
+        <div class="input-group mt-5">
+            <input  class="form-control" type="text" #userInput placeholder="City Name" required />
+            <div class="input-group-append">
+                <button class="input-group-text btn btn-outline-primary" (click)="getCity(userInput.value)">
+                    Search</button>
+            </div>
+        </div>
+    </div>    
+    <div class="row justify-content-md-center">
+        <div class="col-sm-12">
+            <span class="city-info"> Weather in {{weather.city.name}} - {{weather.city.country}}</span>
+        </div>
     </div>
+    <div class="row justify-content-md-center">
+        <div class="table-responsive-sm">
+            <table class="table table-striped table-sm">
 
+                <tbody>
+                    <tr>
+                        <td>Temperature</td>
+                        <td>{{weather.list[0].main.temp - 273.15 | number:'1.0-0'}}º C</td>
+                    </tr>
+                    <tr>
+                        <td>Thermal Sensation</td>
+                        <td>{{weather.list[0].main.feels_like - 273.15 | number:'1.0-0'}}º C</td>
+                    </tr>
+                    <tr>
+                        <td>Weather</td>
+                        <td>{{weather.list[0].weather[0].description}}</td>
+                    </tr>
+                    <tr>
+                        <td>Humidity</td>
+                        <td>{{weather.list[0].main.humidity}}%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
